@@ -1,0 +1,35 @@
+---
+import Container from "@components/Container.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import { TAGS } from "@consts";
+import { getTagsWithCount } from "@lib/tags";
+
+const tagsWithCount = await getTagsWithCount();
+const sortedTags = Array.from(tagsWithCount.entries()).sort((a, b) =>
+  a[0].toLowerCase().localeCompare(b[0].toLowerCase())
+);
+---
+
+<PageLayout title={TAGS.TITLE} description={TAGS.DESCRIPTION}>
+  <Container>
+    <div class="space-y-10">
+      <div class="animate font-semibold text-black dark:text-white text-2xl">
+        Tags
+      </div>
+      {sortedTags.length === 0 ? (
+        <p class="animate">No tags found.</p>
+      ) : (
+        <ul class="animate flex flex-wrap gap-3">
+          {sortedTags.map(([tag, count]) => (
+            <li>
+              <a href={`/tags/${tag}`} class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors">
+                {tag}
+                <span class="text-sm opacity-60">({count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </Container>
+</PageLayout>

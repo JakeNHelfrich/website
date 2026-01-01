@@ -1,0 +1,43 @@
+---
+import Container from "@components/Container.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import BackToPrev from "@components/BackToPrev.astro";
+import { getAllTags, getPostsByTag } from "@lib/tags";
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  return tags.map((tag) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const posts = await getPostsByTag(tag!);
+---
+
+<PageLayout title={`Posts tagged "${tag}"`} description={`All posts tagged with ${tag}`}>
+  <Container>
+    <div class="animate">
+      <BackToPrev href="/tags">
+        Back to tags
+      </BackToPrev>
+    </div>
+    <div class="space-y-10 mt-10">
+      <div class="animate font-semibold text-black dark:text-white text-2xl">
+        Posts tagged "{tag}"
+      </div>
+      {posts.length === 0 ? (
+        <p class="animate">No posts found with this tag.</p>
+      ) : (
+        <ul class="animate flex flex-col gap-4">
+          {posts.map((post) => (
+            <li>
+              <ArrowCard entry={post} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </Container>
+</PageLayout>

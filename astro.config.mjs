@@ -4,6 +4,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  site: "https://username.github.io", // TODO: Replace 'username' with your GitHub username
+  site: "https://jakeh.io",
   integrations: [mdx(), sitemap(), tailwind()],
 });
